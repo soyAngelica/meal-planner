@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+
+
 class App extends Component {
+
+
+
   // initialize our state
   state = {
     data: [],
@@ -65,35 +70,34 @@ class App extends Component {
   // to remove existing database information
   deleteFromDB = (idTodelete) => {
     parseInt(idTodelete);
-    let objIdToDelete = null;
     this.state.data.forEach((dat) => {
       if (dat.id === idTodelete) {
-        objIdToDelete = dat._id;
+        idTodelete = dat.id;
       }
     });
 
     axios.delete('http://localhost:3001/meals/deleteData', {
       data: {
-        id: objIdToDelete,
+        id: idTodelete,
       },
     });
   };
 
   // our update method that uses our backend api
   // to overwrite existing data base information
+  
   updateDB = (idToUpdate, updateToApply) => {
-    let objIdToUpdate = null;
     parseInt(idToUpdate);
     this.state.data.forEach((dat) => {
       if (dat.id === idToUpdate) {
-        objIdToUpdate = dat._id;
+        idToUpdate = dat.id;
       }
     });
-
     axios.post('http://localhost:3001/meals/updateData', {
-      id: objIdToUpdate,
+      id: idToUpdate,
       update: { message: updateToApply },
     });
+    console.log('dejame mostrar algo por fa');
   };
 
   // here is our UI
@@ -136,6 +140,9 @@ class App extends Component {
             DELETE
           </button>
         </div>
+
+
+        {/* update  */}
         <div style={{ padding: '10px' }}>
           <input
             type="text"
