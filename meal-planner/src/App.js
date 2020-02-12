@@ -9,18 +9,18 @@ class App extends Component {
 
   // initialize our state
   state = {
-    data: [],
+    dataG: [],
+    dataB: [],
     id: 0,
-    message: null,
+    nombre: null,
+    tipo: null,
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
     objectToUpdate: null,
   };
 
-  // when component mounts, first thing it does is fetch all existing data in our db
-  // then we incorporate a polling logic so that we can easily see if our db has
-  // changed and implement those changes into our UI
+
   componentDidMount() {
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
@@ -29,8 +29,6 @@ class App extends Component {
     }
   }
 
-  // never let a process live forever
-  // always kill a process everytime we are done using it
   componentWillUnmount() {
     if (this.state.intervalIsSet) {
       clearInterval(this.state.intervalIsSet);
@@ -38,23 +36,20 @@ class App extends Component {
     }
   }
 
-  // just a note, here, in the front end, we use the id key of our data object
-  // in order to identify which we want to Update or delete.
-  // for our back end, we use the object id assigned by MongoDB to modify
-  // data base entries
-
-  // our first get method that uses our backend api to
-  // fetch data from our data base
   getDataFromDb = () => {
     fetch('http://localhost:3001/meals/getData')
-      .then((data) => data.json())
-      .then((res) => this.setState({ data: res.data }));
+      .then((dataB) => dataB.json())
+      .then((res) => this.setState({ dataB: res.dataB }));
+    
+    fetch('http://localhost:3001/meals/getData')
+      .then((dataG) => dataG.json())
+      .then((res) => this.setState({ dataG: res.dataG }));
+
   };
 
-  // our put method that uses our backend api
-  // to create new query into our data base
-  putDataToDB = (message) => {
-    let currentIds = this.state.data.map((data) => data.id);
+
+  putDataToDB = (nombre, tipo) => {
+    let currentIds = this.state.dataG.map((dataG) => dataG.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
       ++idToBeAdded;
@@ -62,15 +57,15 @@ class App extends Component {
 
     axios.post('http://localhost:3001/meals/putData', {
       id: idToBeAdded,
-      message: message,
+      nombre: nombre,
+      tipo: tipo
     });
   };
 
-  // our delete method that uses our backend api
-  // to remove existing database information
+
   deleteFromDB = (idTodelete) => {
     parseInt(idTodelete);
-    this.state.data.forEach((dat) => {
+    this.state.dataG.forEach((dat) => {
       if (dat.id === idTodelete) {
         idTodelete = dat.id;
       }
@@ -86,49 +81,78 @@ class App extends Component {
   // our update method that uses our backend api
   // to overwrite existing data base information
   
-  updateDB = (idToUpdate, updateToApply) => {
+  updateDB = (idToUpdate, updateNombre, updateTipo) => {
+    console.log(`${idToUpdate},${updateNombre},${updateTipo}`);
     parseInt(idToUpdate);
-    this.state.data.forEach((dat) => {
+    this.state.dataG.forEach((dat) => {
       if (dat.id === idToUpdate) {
         idToUpdate = dat.id;
       }
     });
     axios.post('http://localhost:3001/meals/updateData', {
       id: idToUpdate,
-      update: { message: updateToApply },
+      updateNombre: updateNombre,
+      updateTipo : updateTipo
     });
-    console.log('dejame mostrar algo por fa');
   };
 
-  // here is our UI
-  // it is easy to understand their functions when you
-  // see them render into our screen
   render() {
-    const { data } = this.state;
+    const { dataB } = this.state;
+    const { dataG } = this.state;
     return (
       <div>
         <ul>
-          {data.length <= 0
+          {dataB.length <= 0
             ? 'NO DB ENTRIES YET'
-            : data.map((dat) => (
-                <li style={{ padding: '10px' }} key={data.message}>
+            : dataB.map((dat) => (
+                <li style={{ padding: '10px' }} key={dataB.nombre}>
                   <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
-                  <span style={{ color: 'gray' }}> data: </span>
-                  {dat.message}
+                  <span style={{ color: 'gray' }}> nombre: </span>
+                  {dat.nombre}<br />
+                  <span style={{ color: 'gray' }}> tipo: </span>
+                  {dat.tipo}
                 </li>
               ))}
         </ul>
+
+
+        <h2>otra lista</h2>
+
+        <ul>
+          {dataG.length <= 0
+            ? 'NO DB ENTRIES YET'
+            : dataG.map((dat) => (
+                <li style={{ padding: '10px' }} key={dataG.nombre}>
+                  <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
+                  <span style={{ color: 'gray' }}> nombre: </span>
+                  {dat.nombre}<br />
+                  <span style={{ color: 'gray' }}> tipo: </span>
+                  {dat.tipo}
+                </li>
+              ))}
+        </ul>
+
+
+        <h4>AÑADE</h4>
         <div style={{ padding: '10px' }}>
           <input
             type="text"
-            onChange={(e) => this.setState({ message: e.target.value })}
-            placeholder="add something in the database"
+            onChange={(e) => this.setState({ nombre: e.target.value })}
+            placeholder="Nombre"
             style={{ width: '200px' }}
           />
-          <button onClick={() => this.putDataToDB(this.state.message)}>
+          <input
+            type="text"
+            onChange={(e) => this.setState({ tipo: e.target.value })}
+            placeholder="Tipo"
+            style={{ width: '200px' }}
+          />
+          <button onClick={() => this.putDataToDB(this.state.nombre, this.state.tipo )}>
             ADD
           </button>
         </div>
+
+        <h4>BORRA</h4>
         <div style={{ padding: '10px' }}>
           <input
             type="text"
@@ -148,17 +172,23 @@ class App extends Component {
             type="text"
             style={{ width: '200px' }}
             onChange={(e) => this.setState({ idToUpdate: e.target.value })}
-            placeholder="id of item to update here"
+            placeholder="escribe el id"
           />
           <input
             type="text"
             style={{ width: '200px' }}
-            onChange={(e) => this.setState({ updateToApply: e.target.value })}
-            placeholder="put new value of the item here"
+            onChange={(e) => this.setState({ updateNombre: e.target.value })}
+            placeholder="Actualiza Nombre"
+          />
+          <input
+            type="text"
+            style={{ width: '200px' }}
+            onChange={(e) => this.setState({ updateTipo: e.target.value })}
+            placeholder="Actualiza tipo"
           />
           <button
             onClick={() =>
-              this.updateDB(this.state.idToUpdate, this.state.updateToApply)
+              this.updateDB(this.state.idToUpdate, this.state.updateNombre, this.state.updateTipo )
             }
           >
             UPDATE
