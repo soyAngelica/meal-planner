@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import {Route, withRouter} from 'react-router-dom';
 import axios from 'axios';
+import NavBar from './Components/NavBar';
 
 
 
 class App extends Component {
-
 
 
   // initialize our state
@@ -47,6 +48,7 @@ class App extends Component {
 
   };
 
+ 
 
   putDataToDB = (nombre, tipo) => {
     let currentIds = this.state.dataG.map((dataG) => dataG.id);
@@ -78,9 +80,7 @@ class App extends Component {
     });
   };
 
-  // our update method that uses our backend api
-  // to overwrite existing data base information
-  
+
   updateDB = (idToUpdate, updateNombre, updateTipo) => {
     console.log(`${idToUpdate},${updateNombre},${updateTipo}`);
     parseInt(idToUpdate);
@@ -100,7 +100,12 @@ class App extends Component {
     const { dataB } = this.state;
     const { dataG } = this.state;
     return (
+     
       <div>
+        <NavBar />
+          
+
+        <h2>Desayunos</h2>
         <ul>
           {dataB.length <= 0
             ? 'NO DB ENTRIES YET'
@@ -116,7 +121,7 @@ class App extends Component {
         </ul>
 
 
-        <h2>otra lista</h2>
+        <h2>Todas las Comidas</h2>
 
         <ul>
           {dataG.length <= 0
@@ -131,6 +136,9 @@ class App extends Component {
                 </li>
               ))}
         </ul>
+
+
+         
 
 
         <h4>AÑADE</h4>
