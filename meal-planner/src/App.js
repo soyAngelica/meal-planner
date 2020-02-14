@@ -8,7 +8,6 @@ import NavBar from './Components/NavBar';
 class App extends Component {
 
 
-  // initialize our state
   state = {
     dataG: [],
     dataB: [],
@@ -23,19 +22,20 @@ class App extends Component {
 
 
   componentDidMount() {
+    
     this.getDataFromDb();
-    if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
-      this.setState({ intervalIsSet: interval });
-    }
+      if (!this.state.intervalIsSet) {
+        let interval = setInterval(this.getDataFromDb, 1000);
+        this.setState({ intervalIsSet: interval });
+      }
   }
 
-  componentWillUnmount() {
-    if (this.state.intervalIsSet) {
-      clearInterval(this.state.intervalIsSet);
-      this.setState({ intervalIsSet: null });
-    }
-  }
+  // componentWillUnmount() {
+  //   if (this.state.intervalIsSet) {
+  //     clearInterval(this.state.intervalIsSet);
+  //     this.setState({ intervalIsSet: null });
+  //   }
+  // }
 
   getDataFromDb = () => {
     fetch('http://localhost:3001/meals/getData')
@@ -45,12 +45,10 @@ class App extends Component {
     fetch('http://localhost:3001/meals/getData')
       .then((dataG) => dataG.json())
       .then((res) => this.setState({ dataG: res.dataG }));
-
   };
 
- 
 
-  putDataToDB = (nombre, tipo) => {
+   putDataToDB = (nombre, tipo) => {
     let currentIds = this.state.dataG.map((dataG) => dataG.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
