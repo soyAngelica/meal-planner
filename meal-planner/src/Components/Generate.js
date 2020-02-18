@@ -8,18 +8,20 @@ class Generate extends Component {
         super(props); 
         this.state  = {
             dataF: [],
-            plan: [],
+            plans: [],
         };
         this.generate = this.generate.bind(this);
     }
-
-
    
-     getDataPlan = () => {
+    getDataPlan = () => {
         fetch('http://localhost:3001/meals/getPlans')
         .then((plans) => plans.json())
-        .then((res) => this.setState({ plans: res.plans }));
+        .then((res) => this.setState({ plans: res.plans }))
+        .catch(function(error) {
+            console.log(error.message);
+        });
     };
+
 
     getDataRandom = () => {
         fetch('http://localhost:3001/meals/getRandom')
@@ -27,37 +29,33 @@ class Generate extends Component {
         .then((res) => this.setState({ dataF: res.dataF }));
     };
 
-    putDataToDB = (dateP, breakfast) => {
-        let currentIds = this.state.plans.map((plans) => plans.id); // need to get the current ID plans
-        let idToBeAdded = 0;
-        while (currentIds.includes(idToBeAdded)) {
-            ++idToBeAdded;
-            console.log(`hola pendejo ${idToBeAdded}`);
-        }
-
+    putDataToDB = (id, dateP, breakfast) => {
+        console.log(`${id}, ${dateP}, ${breakfast}`)
         axios.post('http://localhost:3001/meals/putDataPlan', {
-            id: idToBeAdded,
+            // id: idToBeAdded,
             dateP: dateP,
             breakfast: breakfast
         });
     };
 
-
-
-
-
-   
+  
     componentDidMount() {
         this.getDataRandom();
+        this.getDataPlan();
+        let currentId = (this.state.plans.map((plans) => plans.id)).pop();
+        console.log(`putopendejo ${currentId}`);
     }
 
-     generate() {      
+     generate() {    
+
         console.log('generate');
 
         this.getDataRandom();
         this.getDataPlan();
+
         const dataF = this.state.dataF;
-        const plan = this.state.plan;
+        const plans = this.state.plans;
+        let currentId = (this.state.plans.map((plans) => plans.id)).pop();
 
         Date.prototype.addDays = function(days) {
         var dat = new Date(this.valueOf())
@@ -82,18 +80,18 @@ class Generate extends Component {
 
         const items = [];
 
-        for (var i = 0; i < 7; ++i) {      
+        for (var i = 0; i < 7; ++i) {  
+            ++currentId
             items.push({ 
+                id: currentId,
                 dateP: dateArray[i],
                 breakfast:  dataF[i].id
             }) 
         }
 
         const planN = items.map((planN) => {
-            this.putDataToDB(planN.dateP, planN.breakfast)
+            this.putDataToDB(planN.id, planN.dateP, planN.breakfast)
         });
-
-       
     }
 
     render() {
