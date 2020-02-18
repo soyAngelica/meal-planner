@@ -30,12 +30,12 @@ class App extends Component {
       }
   }
 
-  // componentWillUnmount() {
-  //   if (this.state.intervalIsSet) {
-  //     clearInterval(this.state.intervalIsSet);
-  //     this.setState({ intervalIsSet: null });
-  //   }
-  // }
+  componentWillUnmount() {
+    if (this.state.intervalIsSet) {
+      clearInterval(this.state.intervalIsSet);
+      this.setState({ intervalIsSet: null });
+    }
+  }
 
   getDataFromDb = () => {
     fetch('http://localhost:3001/meals/getData')
@@ -193,9 +193,9 @@ class App extends Component {
             placeholder="Actualiza tipo"
           />
           <button
-            onClick={() =>
-              this.updateDB(this.state.idToUpdate, this.state.updateNombre, this.state.updateTipo )
-            }
+            // onClick={() =>
+            //   this.updateDB(this.state.idToUpdate, this.state.updateNombre, this.state.updateTipo )
+            // }
           >
             UPDATE
           </button>
