@@ -46,6 +46,13 @@ class Generate extends Component {
     };
 
 
+    getPlan = () => {
+        fetch('http://localhost:3001/meals/plans')
+        .then((plan) => plan.json())
+        .then((res) => console.log(res.plan));
+    };
+
+
     putDataToDB = (id, dateP, breakfast, lunch, dinner) => {
         axios.post('http://localhost:3001/meals/putDataPlan', {
             id: id,
@@ -62,7 +69,9 @@ class Generate extends Component {
         this.getDataRandomL();
         this.getDataRandomD();
         this.getDataPlan();
-        let currentId = (this.state.plans.map((plans) => plans.id)).pop();
+        this.getPlan();
+        
+        let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
     }
 
      generate() {    
@@ -74,13 +83,14 @@ class Generate extends Component {
         this.getDataRandomL();
         this.getDataRandomD();
         this.getDataPlan();
+        // this.getPlan();
 
         const dataF = this.state.dataF;
         const dataL = this.state.dataL;
         const dataD = this.state.dataD;
 
         const plans = this.state.plans;
-        let currentId = (this.state.plans.map((plans) => plans.id)).pop();
+        let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
 
         Date.prototype.addDays = function(days) {
         var dat = new Date(this.valueOf())
@@ -110,9 +120,9 @@ class Generate extends Component {
             items.push({ 
                 id: currentId,
                 dateP: dateArray[i],
-                breakfast:  dataF[i].id,
-                lunch:  dataL[i].id,
-                dinner:  dataD[i].id,
+                breakfast:  dataF[i]._id,
+                lunch:  dataL[i]._id,
+                dinner:  dataD[i]._id,
 
             }) 
         }
