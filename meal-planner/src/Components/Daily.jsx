@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Grid } from '@material-ui/core';
 
 
 
@@ -45,29 +46,28 @@ class Daily extends Component {
 
         return (
 
-            <div>  
+            <Grid container spacing={1} disableGutters={false}> 
 
                 <div>Here goes the calendar</div>
 
-                <ul>
-                    {plans.length <= 0
+                <Grid container item xs={12} spacing={3} >
+                    { plans.length <= 0
                     ? 'NO DB ENTRIES YET'
                     : plans.map((planN) => (
-                        <li style={{ padding: '10px' }} key={planN.id}>
-                            <span style={{ color: 'gray' }}> Fecha: {planN.dateP} </span> <br />
+
+
+                       <li style={{ padding: '10px' }} key={planN.id}>
+                            <span style={{ color: 'gray' }}> Fecha: {planN.dateP.substr(0,9)} </span> <br />
                             <span style={{ color: 'gray' }}> Desayuno: {planN.breakfast.nombre} </span> <br />
                             <span style={{ color: 'gray' }}> Comida: {planN.lunch.nombre} </span> <br />
                             <span style={{ color: 'gray' }}> Cena: {planN.dinner.nombre} </span> <br />
 
                         </li>
                         ))}
-                </ul>
+                </Grid>
 
-            </div>  
+             </Grid> 
 
-            // const planN = items.map((this.state.plan) => {
-            //     console.log(`${planN.id}, ${planN.dateP}, ${planN.breakfast},${planN.lunch},${planN.dinner}`)
-            // });
         )
     }
 }

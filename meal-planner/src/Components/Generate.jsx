@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import OutdoorGrillIcon from '@material-ui/icons/OutdoorGrill';
 
 
 class Generate extends Component {
@@ -73,16 +73,13 @@ class Generate extends Component {
         let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
     }
 
-     generate() {    
+    generate() {    
 
         console.log('generate');
-
-        
         this.getDataRandom();
         this.getDataRandomL();
         this.getDataRandomD();
         this.getDataPlan();
-        // this.getPlan();
 
         const dataF = this.state.dataF;
         const dataL = this.state.dataL;
@@ -131,15 +128,27 @@ class Generate extends Component {
         });
     }
 
+
+
     render() {
         return (
-            <button
-                className="btn btn-primary"
-                onClick={this.generate}>
-                Generar nuevo Menú
-            </button>
+            <OutdoorGrillIcon  onClick={this.generate} />
         )
     }
 }
 
 export default Generate;
+
+
+// // styles 
+
+// font-size: 48px;
+// width: 48px;
+// margin: 0 auto;
+// background: crimson;
+// border-radius: 100px;
+// padding: 20px;
+// position: absolute;
+// left: 40%;
+// top: -40px;
+// }
