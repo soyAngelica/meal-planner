@@ -1,7 +1,28 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Grid } from '@material-ui/core';
+import { withStyles } from "@material-ui/core/styles";
+import clsx from 'clsx';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
+
+const styles = theme => ({
+    root: {
+        maxWidth: '100%',
+        margin: '0 auto',
+        width: '100%',
+        marginBottom: 30,
+      },
+      media: {
+        height: 140,
+    },
+})
 
 
 class Daily extends Component {
@@ -40,36 +61,76 @@ class Daily extends Component {
         }
       }
 
-
     render() {
         const plans = this.state.plan;
-
+        const { classes } = this.props;
         return (
-
-            <Grid container spacing={1} disableGutters={false}> 
-
-                <div>Here goes the calendar</div>
-
-                <Grid container item xs={12} spacing={3} >
+            <Grid container spacing={1} disableGutters={false} className={classes.cardRoot}> 
+                <Grid container item xs={12}  >     
                     { plans.length <= 0
                     ? 'NO DB ENTRIES YET'
                     : plans.map((planN) => (
-
-
-                       <li style={{ padding: '10px' }} key={planN.id}>
-                            <span style={{ color: 'gray' }}> Fecha: {planN.dateP.substr(0,9)} </span> <br />
-                            <span style={{ color: 'gray' }}> Desayuno: {planN.breakfast.nombre} </span> <br />
-                            <span style={{ color: 'gray' }}> Comida: {planN.lunch.nombre} </span> <br />
-                            <span style={{ color: 'gray' }}> Cena: {planN.dinner.nombre} </span> <br />
-
-                        </li>
-                        ))}
+                        <div key={planN.id} className={classes.root}>                             
+                            <h1>{planN.dateP.split('T')[0]}</h1>
+                            <Card className={classes.root}>
+                                <CardActionArea>
+                                    <CardMedia
+                                    className={classes.media}
+                                    image="/static/images/cards/contemplative-reptile.jpg"
+                                    title="Contemplative Reptile"
+                                    />
+                                    <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                        Breakfast
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary" component="p">
+                                    {planN.breakfast.nombre}
+                                    </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                            <Card className={classes.root}>
+                                <CardActionArea>
+                                    <CardMedia
+                                    className={classes.media}
+                                    image="/static/images/cards/contemplative-reptile.jpg"
+                                    title="Contemplative Reptile"
+                                    />
+                                    <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                       Lunch
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary" component="p">
+                                    {planN.lunch.nombre}
+                                    </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                            
+                            <Card className={classes.root}>
+                                <CardActionArea>
+                                    <CardMedia
+                                    className={classes.media}
+                                    image="/static/images/cards/contemplative-reptile.jpg"
+                                    title="Contemplative Reptile"
+                                    />
+                                    <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h2">
+                                    Dinner
+                                    </Typography>
+                                    <Typography variant="body2" color="textSecondary" component="p">
+                                    {planN.dinner.nombre}
+                                    </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>                            
+                        </div>
+                    ))}
                 </Grid>
-
              </Grid> 
-
         )
     }
 }
 
-export default Daily;
+
+export default withStyles(styles)(Daily);

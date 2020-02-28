@@ -104,12 +104,9 @@ class Meals extends Component {
             {dataB.length <= 0
               ? 'NO DB ENTRIES YET'
               : dataB.map((dat) => (
-                  <li style={{ padding: '10px' }} key={dataB.nombre}>
-                    <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
+                  <li style={{ padding: '10px' }} key={dat.id}>
                     <span style={{ color: 'gray' }}> nombre: </span>
                     {dat.nombre}<br />
-                    <span style={{ color: 'gray' }}> tipo: </span>
-                    {dat.tipo}
                   </li>
                 ))}
           </ul>
@@ -121,12 +118,9 @@ class Meals extends Component {
             {dataG.length <= 0
               ? 'NO DB ENTRIES YET'
               : dataG.map((dat) => (
-                  <li style={{ padding: '10px' }} key={dataG.nombre}>
-                    <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
+                  <li style={{ padding: '10px' }} key={dat.id}>
                     <span style={{ color: 'gray' }}> nombre: </span>
                     {dat.nombre}<br />
-                    <span style={{ color: 'gray' }}> tipo: </span>
-                    {dat.tipo}
                   </li>
                 ))}
           </ul>

@@ -53,30 +53,39 @@ const useStyles = makeStyles(theme => ({
     float:'left',
     marginLeft: 40, 
   }, 
+  idaily : {
+    position: 'absolute',
+    left: '45%',
+    top:0,
+  },
   center: {
     position: 'relative'
   }
 
 }));
 
-export default function NavBar() {
+export default function MainNavBar() {
   
   const classes = useStyles();
     
     return (
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <Container maxWidth="sm" className={classes.center}> 
-              <Link to="/Calendar">
-                <EventIcon  className={`${classes.icons} ${classes.icalendar}`}/>
-              </Link>
-              <Generate/>
-              <Link to="/Meals">
-                <OutdoorGrillIcon  className={`${classes.icons} ${classes.imeals}`}/>
-              </Link>
-            </Container>
+         <AppBar position="fixed"  className={classes.appBar}>
+            <Toolbar>
+                <Container maxWidth="sm" className={classes.center}>  
+                    <Link  to="/Calendar">
+                        <EventIcon className={`${classes.icons} ${classes.icalendar}`}/>
+                    </Link>
+                    <Link  to="/">
+                        <LocalDiningIcon  className={`${classes.icons} ${classes.idaily}`} />
+                    </Link>
+                    <Link  to="/Meals">
+                        <OutdoorGrillIcon className={`${classes.icons} ${classes.imeals}`} />
+                    </Link>                
+                </Container>
             </Toolbar>
-        </AppBar>      
+        </AppBar>
+      
     );
+
 }     
   

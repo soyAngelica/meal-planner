@@ -1,10 +1,55 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import OutdoorGrillIcon from '@material-ui/icons/OutdoorGrill';
+import { makeStyles } from '@material-ui/core/styles';
+import FlashOnIcon from '@material-ui/icons/FlashOn';
+import Typography from '@material-ui/core/Typography';
+
+
+
+const useStyles = makeStyles(theme => ({
+    iconGenerate: {
+        fontSize: 48,
+        textAlign: 'center',
+        display: 'block',
+        margin: '0 auto',
+        position: 'relative',
+        top: '-7px',
+    },
+    GenterateContent: {
+        cursor: 'pointer',
+        margin: '0 auto',
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        borderRadius: 100,
+        padding:'22px 20px',
+        position: 'absolute',
+        left: '40%',
+        top: '-60px',
+        '& span': {
+            fontFamily: "'Roboto'",
+            fontSize: 14,
+            textAlign: 'center',
+            display:'block',
+            margin: '0 auto',
+            position: 'relative',
+            top: '-5px'
+        }
+    }
+
+}));
+
+
+function Gen() {
+    const classes = useStyles();
+    return (
+        <div className={classes.GenterateContent}>
+            <FlashOnIcon className={classes.iconGenerate}  />
+            <span>New Menú!</span>
+        </div>
+    )
+}
 
 
 class Generate extends Component {
-
     constructor(props) {
         super(props); 
         this.state  = {
@@ -14,9 +59,17 @@ class Generate extends Component {
             plans: [],
         };
         this.generate = this.generate.bind(this);
-        
     }
-   
+
+    componentDidMount() {
+        this.getDataRandom();
+        this.getDataRandomL();
+        this.getDataRandomD();
+        this.getDataPlan();
+    
+        let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
+    }
+
     getDataPlan = () => {
         fetch('http://localhost:3001/meals/getPlans')
         .then((plans) => plans.json())
@@ -63,35 +116,22 @@ class Generate extends Component {
         });
     };
 
-  
-    componentDidMount() {
-        this.getDataRandom();
-        this.getDataRandomL();
-        this.getDataRandomD();
-        this.getDataPlan();
-       
-        let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
-    }
-
     generate() {    
-
         console.log('generate');
         this.getDataRandom();
         this.getDataRandomL();
         this.getDataRandomD();
         this.getDataPlan();
-
         const dataF = this.state.dataF;
         const dataL = this.state.dataL;
         const dataD = this.state.dataD;
-
         const plans = this.state.plans;
         let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
 
         Date.prototype.addDays = function(days) {
-        var dat = new Date(this.valueOf())
-        dat.setDate(dat.getDate() + days);
-        return dat;
+            var dat = new Date(this.valueOf())
+            dat.setDate(dat.getDate() + days);
+            return dat;
         }
         
         function getDates(startDate, stopDate) {
@@ -127,28 +167,17 @@ class Generate extends Component {
             this.putDataToDB(planN.id, planN.dateP, planN.breakfast,planN.lunch,planN.dinner)
         });
     }
-
-
-
+        
     render() {
         return (
-            <OutdoorGrillIcon  onClick={this.generate} />
+            <div onClick={this.generate}>
+                <Gen />
+                
+            </div>
         )
     }
 }
 
-export default Generate;
+    
 
-
-// // styles 
-
-// font-size: 48px;
-// width: 48px;
-// margin: 0 auto;
-// background: crimson;
-// border-radius: 100px;
-// padding: 20px;
-// position: absolute;
-// left: 40%;
-// top: -40px;
-// }
+ export default Generate

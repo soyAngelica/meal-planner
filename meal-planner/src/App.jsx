@@ -1,28 +1,40 @@
 import React, { Component } from 'react';
 import {Route, withRouter} from 'react-router-dom';
 import axios from 'axios';
-import NavBar from './Components/NavBar';
+import DailyNavBar from './Components/NavBar';
+import MainNavBar from './Components/MainNavBar';
 import Meals from './Components/Meals';
 import Daily from './Components/Daily';
 import { Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles(theme => ({
+  wrapper: {
+    padding: 40,
+  },
+  
+}));
 
 
 
-class App extends Component {
 
-    render() {
+export default function App() { 
+  
+  const classes = useStyles();
+  
       return (
        
-        <Container maxWidth="sm">             
-            <Route path='/' component={Daily} />
-            <Route path='/meals' component={Meals}/>
-            <NavBar />          
+        <Container maxWidth="sm" className={classes.wrapper}>             
+            <Route exact path='/'>
+              <Daily />
+              <DailyNavBar />          
+            </Route>
+            <Route exact path='/meals'>
+              <Meals/>
+              <MainNavBar />
+            </Route>
         </Container>
             
       );
-    }
+    
 }
-
-export default App;
