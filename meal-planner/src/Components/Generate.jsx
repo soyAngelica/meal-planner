@@ -165,6 +165,7 @@ class Generate extends Component {
 
         const planN = items.map((planN) => {
             this.putDataToDB(planN.id, planN.dateP, planN.breakfast,planN.lunch,planN.dinner)
+            console.log(planN);
         });
     }
         
