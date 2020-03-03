@@ -37,6 +37,12 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
+// top: -60px;
+// left: 42%;
+// cursor: pointer;
+// margin: 0 auto;
+// padding: 17px 15px;
+
 
 function Gen() {
     const classes = useStyles();
@@ -65,8 +71,7 @@ class Generate extends Component {
         this.getDataRandom();
         this.getDataRandomL();
         this.getDataRandomD();
-        this.getDataPlan();
-    
+        this.getDataPlan();    
         let currentId = (!(this.state.plans.map((plans) => plans.id)).pop())?'0':(this.state.plans.map((plans) => plans.id)).pop();
     }
 
@@ -117,7 +122,6 @@ class Generate extends Component {
     };
 
     generate() {    
-        console.log('generate');
         this.getDataRandom();
         this.getDataRandomL();
         this.getDataRandomD();
@@ -172,8 +176,7 @@ class Generate extends Component {
     render() {
         return (
             <div onClick={this.generate}>
-                <Gen />
-                
+                <Gen />                
             </div>
         )
     }

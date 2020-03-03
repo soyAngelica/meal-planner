@@ -64,6 +64,12 @@ class Daily extends Component {
     render() {
         const plans = this.state.plan;
         const { classes } = this.props;
+        const options = {
+
+            year: "numeric",
+            month:"long",
+            day:"numeric"}
+
         return (
             <Grid container spacing={1} disableGutters={false} className={classes.cardRoot}> 
                 <Grid container item xs={12}  >     
@@ -71,7 +77,8 @@ class Daily extends Component {
                     ? 'NO DB ENTRIES YET'
                     : plans.map((planN) => (
                         <div key={planN.id} className={classes.root}>                             
-                            <h1>{planN.dateP.split('T')[0]}</h1>
+                            <h1>{ (new Date(planN.dateP)).toLocaleDateString('en-US', options) }
+                               </h1>
                             <Card className={classes.root}>
                                 <CardActionArea>
                                     <CardMedia
