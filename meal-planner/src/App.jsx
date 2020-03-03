@@ -3,6 +3,7 @@ import {Route, withRouter} from 'react-router-dom';
 import axios from 'axios';
 import DailyNavBar from './Components/NavBar';
 import MainNavBar from './Components/MainNavBar';
+import TopNavBar from './Components/TopNavBar';
 import Meals from './Components/Meals';
 import Daily from './Components/Daily';
 import { Container } from '@material-ui/core';
@@ -12,7 +13,6 @@ const useStyles = makeStyles(theme => ({
   wrapper: {
     padding: 40,
   },
-  
 }));
 
 
@@ -26,8 +26,9 @@ export default function App() {
        
         <Container maxWidth="sm" className={classes.wrapper}>             
             <Route exact path='/'>
+              <TopNavBar /> 
               <Daily />
-              <DailyNavBar />          
+              <DailyNavBar />        
             </Route>
             <Route exact path='/meals'>
               <Meals/>

@@ -8,6 +8,8 @@ class Meals extends Component {
     state = {
       dataG: [],
       dataB: [],
+      dataL: [],
+      dataD: [],
       id: 0,
       nombre: null,
       tipo: null,
@@ -36,12 +38,20 @@ class Meals extends Component {
   
     getDataFromDb = () => {
       fetch('http://localhost:3001/meals/getData')
+      .then((dataG) => dataG.json())
+      .then((res) => this.setState({ dataG: res.dataG }));
+
+      fetch('http://localhost:3001/meals/getData')
         .then((dataB) => dataB.json())
         .then((res) => this.setState({ dataB: res.dataB }));
       
       fetch('http://localhost:3001/meals/getData')
-        .then((dataG) => dataG.json())
-        .then((res) => this.setState({ dataG: res.dataG }));
+        .then((dataL) => dataL.json())
+        .then((res) => this.setState({ dataL: res.dataL }));
+      
+      fetch('http://localhost:3001/meals/getData')
+        .then((dataD) => dataD.json())
+        .then((res) => this.setState({ dataD: res.dataD }));
     };
   
   
@@ -92,38 +102,53 @@ class Meals extends Component {
     };
   
     render() {
+      const  { dataG } = this.state;
       const { dataB } = this.state;
-      const { dataG } = this.state;
+      const { dataL } = this.state;
+      const { dataD } = this.state;
+      
+
       return (
        
         <div>
             
   
-          <h2>Desayunos</h2>
+          <h2>Breakfast</h2>
           <ul>
             {dataB.length <= 0
               ? 'NO DB ENTRIES YET'
               : dataB.map((dat) => (
                   <li style={{ padding: '10px' }} key={dat.id}>
-                    <span style={{ color: 'gray' }}> nombre: </span>
+                    <span style={{ color: 'gray' }}> {dat.id} </span>
                     {dat.nombre}<br />
                   </li>
                 ))}
           </ul>
-  
-  
-          <h2>Todas las Comidas</h2>
-  
+
+          <h2>Lunch</h2>
           <ul>
-            {dataG.length <= 0
+            {dataL.length <= 0
               ? 'NO DB ENTRIES YET'
-              : dataG.map((dat) => (
+              : dataL.map((dat) => (
                   <li style={{ padding: '10px' }} key={dat.id}>
-                    <span style={{ color: 'gray' }}> nombre: </span>
+                    <span style={{ color: 'gray' }}> {dat.id} </span>
                     {dat.nombre}<br />
                   </li>
                 ))}
           </ul>
+
+          <h2>Dinner</h2>
+          <ul>
+            {dataD.length <= 0
+              ? 'NO DB ENTRIES YET'
+              : dataD.map((dat) => (
+                  <li style={{ padding: '10px' }} key={dat.id}>
+                    <span style={{ color: 'gray' }}> {dat.id} </span>
+                    {dat.nombre}<br />
+                  </li>
+                ))}
+          </ul> 
+  
           <h4>AÑADE</h4>
           <div style={{ padding: '10px' }}>
             <input
