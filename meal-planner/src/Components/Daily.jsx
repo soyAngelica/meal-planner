@@ -9,6 +9,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Carousel, { Dots } from '@brainhubeu/react-carousel';
+import '@brainhubeu/react-carousel/lib/style.css';
 
 
 
@@ -35,9 +37,18 @@ class Daily extends Component {
         super(props); 
         this.state  = {
             plan: [],
-            intervalIsSet: false
+            intervalIsSet: false,
+            value: 0
         };
+        this.onChange = this.onChange.bind(this);
     }
+
+    onChange(value) {
+        this.setState({ value });
+    }
+
+
+
     getPlan = () => {
         fetch('http://localhost:3001/meals/plans')
         .then((plan) => plan.json())
@@ -73,8 +84,12 @@ class Daily extends Component {
             day:"numeric"}
 
         return (
+
             <Grid container spacing={1} disableGutters={false} className={classes.cardRoot}> 
-                <Grid container item xs={12}  >     
+                <Grid container item xs={12}  >
+
+                <Carousel>
+                    
                     { plans.length <= 0
                     ? '🥣'
                     : plans.map((planN) => (
@@ -135,6 +150,10 @@ class Daily extends Component {
                             </Card>                            
                         </div>
                     ))}
+
+                </Carousel>
+
+
                 </Grid>
              </Grid> 
         )
