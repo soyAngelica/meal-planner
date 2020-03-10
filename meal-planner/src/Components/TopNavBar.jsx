@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import {Link, withRouter} from 'react-router-dom';
 import Generate from './Generate';
 import { withStyles } from "@material-ui/core/styles";
@@ -49,10 +50,13 @@ class TopNavBar extends Component   {
         super(props); 
         this.state  = {
             plans: [],
+            plan:[],
             intervalIsSet: false
         };
         
     }
+
+   
 
     getDataPlan = () => {
         fetch('http://localhost:3001/meals/getPlans')
@@ -85,6 +89,8 @@ class TopNavBar extends Component   {
         const options = {
           weekday: "short",
           day:"2-digit"}
+
+    
         
         return (
           <AppBar position="fixed" className={classes.appBar}>
@@ -94,7 +100,7 @@ class TopNavBar extends Component   {
                   { plans.length <= 0
                   ? '🥣'
                   : plans.map((planN) => (
-                      <li key={planN.id} className={classes.list}> 
+                      <li key={planN.id} className={classes.list} > 
                         <button>
                             <span>{ (new Date(planN.dateP)).toLocaleDateString('en-US', options).split(' ')[1] }
                             </span>

@@ -99,13 +99,6 @@ class Generate extends Component {
     };
 
 
-    getPlan = () => {
-        fetch('http://localhost:3001/meals/plans')
-        .then((plan) => plan.json())
-        .then((res) => console.log(res.plan));
-    };
-
-
     putDataToDB = (id, dateP, breakfast, lunch, dinner) => {
         axios.post('http://localhost:3001/meals/putDataPlan', {
             id: id,
