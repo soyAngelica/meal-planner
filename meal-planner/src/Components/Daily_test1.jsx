@@ -33,12 +33,27 @@ const styles = theme => ({
     }
 })
 
-const data = range(0, 999).map(n => ({
-  title: `Card ${n}`,
-  text: `This is card ${n}`
-}))
+
+// const data = plan.map((planN) => ({
+//     key: planN.id,
+//     breakfast: planN.breakfast.nombre,
+//     lunch: planN.lunch.nombre,
+//     dinner: planN.dinner.nombre 
+// }))
+
+const data = range(0, 12).map(n => ({
+    title: `Card ${n}`,
+    text: `This is card ${n}`
+  }))
+
+// alert(data.length)
 
 
+const queryPage = parseInt(window.location.search.slice(1))
+const startPage = queryPage ? clamp(queryPage, 0, data.length - 1) : 0
+
+const carouselWidth = clamp(window.innerWidth, 0, 960)
+const cardSize = carouselWidth
 
 
 class Daily extends Component {
@@ -51,6 +66,7 @@ class Daily extends Component {
             page: clamp(startPage, 0, data.length - renderedData.length),
             renderedData
         };
+        this.defaultCursor = (data.length - renderedData.length) - startPage
     }
 
 
@@ -133,6 +149,18 @@ class Daily extends Component {
         const CarouselContainer = this.container
 
         const plans = this.state.plan
+
+        const data1 = plans.map((planN) => ({
+            key: planN.id,
+            breakfast: planN.breakfast.nombre,
+            lunch: planN.lunch.nombre,
+            dinner: planN.dinner.nombre 
+        }))   
+
+
+
+
+
         const { classes } = this.props;
         const options = {
 
@@ -144,71 +172,6 @@ class Daily extends Component {
             <React.StrictMode>
                 <Grid container spacing={1} disableGutters={false} className={classes.cardRoot}> 
                     <Grid container item xs={12}  >
-                    { plans.length <= 0
-                        ? '🥣'
-                        : plans.map((planN) => (
-                            <div key={planN.id} className={classes.root}>                             
-                                <h2>{ (new Date(planN.dateP)).toLocaleDateString('en-US', options) }
-                                   </h2>
-                                <Card className={classes.root}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                        className={classes.media}
-                                        image="/static/images/cards/contemplative-reptile.jpg"
-                                        title="Contemplative Reptile"
-                                        />
-                                        <CardContent className={classes.info}>
-                                        <Typography gutterBottom variant="h5" component="h3">
-                                            Breakfast
-                                        </Typography>
-                                        <Typography variant="body2" color="light" component="p">
-                                        {planN.breakfast.nombre}
-                                        </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                                <Card className={classes.root}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                        className={classes.media}
-                                        image="/static/images/cards/contemplative-reptile.jpg"
-                                        title="Contemplative Reptile"
-                                        />
-                                        <CardContent className={classes.info}>
-                                        <Typography gutterBottom variant="h5" component="h3">
-                                           Lunch
-                                        </Typography>
-                                        <Typography variant="body2" color="light" component="p">
-                                        {planN.lunch.nombre}
-                                        </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                                
-                                <Card className={classes.root}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                        className={classes.media}
-                                        image="/static/images/cards/contemplative-reptile.jpg"
-                                        title="Contemplative Reptile"
-                                        />
-                                        <CardContent className={classes.info}>
-                                        <Typography gutterBottom variant="h5" component="h3">
-                                        Dinner
-                                        </Typography>
-                                        <Typography variant="body2" color="light" component="p">
-                                        {planN.dinner.nombre}
-                                        </Typography>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>                            
-                            </div>
-                        ))}
-
-
-
-
-
                         <TouchCarousel
                         ref={elt => { this.carousel = elt }}
                         component={CarouselContainer}
