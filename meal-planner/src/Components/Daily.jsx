@@ -9,11 +9,16 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import TouchCarousel, {clamp, range} from 'react-touch-carousel';
+import { CarouselProvider, Slider, Slide, ButtonBack, ButtonNext } from 'pure-react-carousel';
+import 'pure-react-carousel/dist/react-carousel.es.css';
+
 
 
 
 const styles = theme => ({
+    Carousel:{
+        width: '100%'
+    },
     cardRoot: {
         marginTop: 100,
     },
@@ -22,7 +27,7 @@ const styles = theme => ({
         margin: '0 auto',
         width: '100%',
         marginBottom: 30,
-        marginTop: 50,
+        marginTop: 100,
     },
     media: {
         height: 140,
@@ -33,23 +38,14 @@ const styles = theme => ({
     }
 })
 
-const data = range(0, 999).map(n => ({
-  title: `Card ${n}`,
-  text: `This is card ${n}`
-}))
-
-
-
 
 class Daily extends Component {
     constructor(props) {
         super(props)
-        const renderedData = this.getRenderedData(startPage)        
         this.state  = {
             plan: [],
             intervalIsSet: false,
-            page: clamp(startPage, 0, data.length - renderedData.length),
-            renderedData
+
         };
     }
 
@@ -79,60 +75,12 @@ class Daily extends Component {
         }
       }
 
-      getRenderedData (cursor) {
-        switch (cursor) {
-          case 0: {
-            return data.slice(0, 3)
-          }
-          case data.length - 1: {
-            return data.slice(data.length - 3)
-          }
-          default: {
-            return data.slice(cursor - 1, cursor + 2)
-          }
-        }
-      }
-
-
-      modPage = () => {
-        const cursor = this.carousel.getCursor()
-        const {page, renderedData} = this.state
-        if (Math.round(cursor) !== cursor) return
-        if ( // Do we reach the edge of the window but not the edge of the data?
-          (page !== 0 && cursor === 0) ||
-          (page !== data.length - renderedData.length && cursor === 1 - renderedData.length)
-        ) {
-          // Then move the window.
-          const newCursor = -1 // put cursor at center
-          const newPage = page - cursor + newCursor
-          this.setState({
-            page: newPage,
-            renderedData: this.getRenderedData(newPage)
-          })
-          // This kinda breaks grabbing. But not a big deal I guess.
-          this.carousel.modAs(newCursor)
-        }
-      }
-    
-      renderCard = (index, _, cursor) => {
-        const {page} = this.state
-        const item = data[page + index]
-    
-        return (
-          <div key={index} className='carousel-card'>
-            <div className='carousel-card-inner'>
-              <div className='carousel-title'>{item.title}</div>
-              <div className='carousel-text'>{item.text}</div>
-            </div>
-          </div>
-        )
-      }
+      
 
     render() {
-        const {renderedData} = this.state
-        const CarouselContainer = this.container
-
         const plans = this.state.plan
+        const n = plans.length
+        console.log(`a ver dime de qué va ${n}`);
         const { classes } = this.props;
         const options = {
 
@@ -142,14 +90,22 @@ class Daily extends Component {
 
         return (
             <React.StrictMode>
-                <Grid container spacing={1} disableGutters={false} className={classes.cardRoot}> 
-                    <Grid container item xs={12}  >
-                    { plans.length <= 0
+                <Grid container spacing={1} className={classes.cardRoot}> 
+                    <Grid container item xs={12}  >    
+                    <CarouselProvider className={classes.Carousel}
+                    naturalSlideWidth={100}
+                    naturalSlideHeight={250}
+                    totalSlides={20}
+                    >
+
+                    <Slider>
+                        
+                         { plans.length <= 0
                         ? '🥣'
                         : plans.map((planN) => (
-                            <div key={planN.id} className={classes.root}>                             
+                            <Slide index={planN.id} key={planN.id} className={classes.slide} >                             
                                 <h2>{ (new Date(planN.dateP)).toLocaleDateString('en-US', options) }
-                                   </h2>
+                                </h2>
                                 <Card className={classes.root}>
                                     <CardActionArea>
                                         <CardMedia
@@ -161,8 +117,8 @@ class Daily extends Component {
                                         <Typography gutterBottom variant="h5" component="h3">
                                             Breakfast
                                         </Typography>
-                                        <Typography variant="body2" color="light" component="p">
-                                        {planN.breakfast.nombre}
+                                        <Typography variant="body2" component="p">
+                                            {planN.breakfast.nombre}
                                         </Typography>
                                         </CardContent>
                                     </CardActionArea>
@@ -202,22 +158,30 @@ class Daily extends Component {
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>                            
-                            </div>
+                            </Slide>
                         ))}
+                        
+
+
+
+
+                        {/* <Slide index={0}>I am the first Slide.</Slide>
+                        <Slide index={1}>I am the second Slide.</Slide>
+                        <Slide index={2}>I am the third Slide.</Slide> */}
+                    </Slider>
+
+
+                   
+                    </CarouselProvider>
 
 
 
 
 
-                        <TouchCarousel
-                        ref={elt => { this.carousel = elt }}
-                        component={CarouselContainer}
-                        cardSize={cardSize}
-                        cardCount={renderedData.length}
-                        loop={false}
-                        renderCard={this.renderCard}
-                        defaultCursor={this.defaultCursor}
-                        />
+
+                   
+
+
                     </Grid>
                 </Grid> 
             </React.StrictMode>         
